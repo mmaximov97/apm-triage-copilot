@@ -1,0 +1,43 @@
+{
+  "id": "pix-outage",
+  "description": "PSP-side degradation on PIX in Brazil, confirmed by the provider status page and two merchant reports.",
+  "metrics": [
+    {
+      "window_start": "2026-08-18T10:00:00Z",
+      "window_end": "2026-08-18T10:15:00Z",
+      "method": "pix",
+      "country": "BR",
+      "psp": "psp_acme",
+      "attempts": 1840,
+      "successes": 552,
+      "baseline_success_rate": 0.94
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev_01",
+      "source": "psp_status",
+      "text": "PSP Acme status page: DEGRADED PERFORMANCE on PIX settlement since 09:58 UTC. Engineers are investigating elevated timeouts at the clearing layer. No ETA yet.",
+      "url": "https://status.example-acme.test/incidents/4821",
+      "observed_at": "2026-08-18T10:04:00Z"
+    },
+    {
+      "id": "ev_02",
+      "source": "ticket",
+      "text": "Merchant LojaVerde reports customers seeing 'payment failed' on PIX checkout since about 10:00 UTC. Card payments on the same checkout are unaffected.",
+      "observed_at": "2026-08-18T10:07:00Z"
+    },
+    {
+      "id": "ev_03",
+      "source": "slack",
+      "text": "#apm-latam: three different merchants pinged us about PIX in the last ten minutes. Nothing shipped on our side today, last deploy was Friday.",
+      "observed_at": "2026-08-18T10:09:00Z"
+    }
+  ],
+  "expected": {
+    "signal_created": true,
+    "severity": "P1",
+    "owner": "apm-latam",
+    "overrides": []
+  }
+}

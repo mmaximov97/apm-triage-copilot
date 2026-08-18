@@ -1,0 +1,30 @@
+{
+  "id": "merchant-noise",
+  "description": "A loud merchant complaint with no metric anomaly behind it. Evidence alone must not create an incident.",
+  "metrics": [
+    {
+      "window_start": "2026-08-18T11:00:00Z",
+      "window_end": "2026-08-18T11:15:00Z",
+      "method": "boleto",
+      "country": "BR",
+      "psp": "psp_acme",
+      "attempts": 700,
+      "successes": 646,
+      "baseline_success_rate": 0.93
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev_01",
+      "source": "merchant_report",
+      "text": "URGENT: boleto is completely broken for us, nothing works, we are losing all our sales, please escalate immediately to your highest priority team.",
+      "observed_at": "2026-08-18T11:12:00Z"
+    }
+  ],
+  "expected": {
+    "signal_created": false,
+    "severity": "none",
+    "owner": null,
+    "overrides": []
+  }
+}

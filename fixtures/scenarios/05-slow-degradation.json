@@ -1,0 +1,30 @@
+{
+  "id": "slow-degradation",
+  "description": "An 8pp drop that stays under the absolute threshold. This is a deliberate false negative: single-window detection cannot see a slow slide. Recorded here rather than hidden.",
+  "metrics": [
+    {
+      "window_start": "2026-08-18T09:00:00Z",
+      "window_end": "2026-08-18T09:15:00Z",
+      "method": "pix",
+      "country": "BR",
+      "psp": "psp_beta",
+      "attempts": 1500,
+      "successes": 1290,
+      "baseline_success_rate": 0.94
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev_01",
+      "source": "ticket",
+      "text": "A few customers mention intermittent PIX failures over the past two days. No clear pattern, retries usually succeed.",
+      "observed_at": "2026-08-18T09:10:00Z"
+    }
+  ],
+  "expected": {
+    "signal_created": false,
+    "severity": "none",
+    "owner": null,
+    "overrides": []
+  }
+}

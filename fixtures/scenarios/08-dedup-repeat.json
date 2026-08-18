@@ -1,0 +1,41 @@
+{
+  "id": "dedup-repeat",
+  "description": "The same outage still failing in the next window. The second window must attach to the open incident rather than page anyone a second time.",
+  "metrics": [
+    {
+      "window_start": "2026-08-18T20:00:00Z",
+      "window_end": "2026-08-18T20:15:00Z",
+      "method": "pix",
+      "country": "BR",
+      "psp": "psp_acme",
+      "attempts": 1600,
+      "successes": 400,
+      "baseline_success_rate": 0.94
+    },
+    {
+      "window_start": "2026-08-18T20:20:00Z",
+      "window_end": "2026-08-18T20:35:00Z",
+      "method": "pix",
+      "country": "BR",
+      "psp": "psp_acme",
+      "attempts": 1550,
+      "successes": 372,
+      "baseline_success_rate": 0.94
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev_01",
+      "source": "psp_status",
+      "text": "PSP Acme status page: PIX settlement still degraded, mitigation in progress, next update in 30 minutes.",
+      "url": "https://status.example-acme.test/incidents/4830",
+      "observed_at": "2026-08-18T20:05:00Z"
+    }
+  ],
+  "expected": {
+    "signal_created": true,
+    "severity": "P1",
+    "owner": "apm-latam",
+    "overrides": []
+  }
+}

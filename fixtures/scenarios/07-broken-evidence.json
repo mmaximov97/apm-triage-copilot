@@ -1,0 +1,23 @@
+{
+  "id": "broken-evidence",
+  "description": "A severe metric drop with an empty evidence bundle: the status page fetch failed and no tickets landed yet. Two different guardrails can route this to a human — a low-confidence abstain, or a summary whose claims cannot be cited. Either is a correct outcome; what must not happen is an autonomous escalation on no evidence.",
+  "metrics": [
+    {
+      "window_start": "2026-08-18T16:00:00Z",
+      "window_end": "2026-08-18T16:15:00Z",
+      "method": "pix",
+      "country": "BR",
+      "psp": "psp_acme",
+      "attempts": 1200,
+      "successes": 300,
+      "baseline_success_rate": 0.94
+    }
+  ],
+  "evidence": [],
+  "expected": {
+    "signal_created": true,
+    "severity": "needs_review",
+    "owner": "apm-latam",
+    "overrides": []
+  }
+}

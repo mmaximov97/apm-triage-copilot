@@ -1,0 +1,23 @@
+{
+  "id": "low-volume",
+  "description": "Overnight window with four attempts and one success. Reads as a 75% failure rate and is rejected by the volume gate before any model is called.",
+  "metrics": [
+    {
+      "window_start": "2026-08-18T03:00:00Z",
+      "window_end": "2026-08-18T03:15:00Z",
+      "method": "ideal",
+      "country": "NL",
+      "psp": "psp_lowlands",
+      "attempts": 4,
+      "successes": 1,
+      "baseline_success_rate": 0.96
+    }
+  ],
+  "evidence": [],
+  "expected": {
+    "signal_created": false,
+    "severity": "none",
+    "owner": null,
+    "overrides": []
+  }
+}

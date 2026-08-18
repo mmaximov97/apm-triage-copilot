@@ -1,0 +1,37 @@
+{
+  "id": "planned-maintenance",
+  "description": "A genuine and severe metric drop that the provider announced in advance. The rule layer fires correctly; the reasoning layer should recognise announced maintenance and hold severity down.",
+  "metrics": [
+    {
+      "window_start": "2026-08-18T12:00:00Z",
+      "window_end": "2026-08-18T12:15:00Z",
+      "method": "ideal",
+      "country": "NL",
+      "psp": "psp_lowlands",
+      "attempts": 900,
+      "successes": 380,
+      "baseline_success_rate": 0.96
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev_01",
+      "source": "psp_status",
+      "text": "SCHEDULED MAINTENANCE: iDEAL routing at PSP Lowlands is undergoing planned migration between 12:00 and 13:00 UTC on 18 August 2026. Elevated failure rates are expected. This window was announced on 4 August.",
+      "url": "https://status.example-lowlands.test/maintenance/311",
+      "observed_at": "2026-08-04T09:00:00Z"
+    },
+    {
+      "id": "ev_02",
+      "source": "slack",
+      "text": "#apm-emea: reminder, Lowlands iDEAL maintenance is today 12:00-13:00 UTC. Expect noise, do not page anyone.",
+      "observed_at": "2026-08-18T08:30:00Z"
+    }
+  ],
+  "expected": {
+    "signal_created": true,
+    "severity": "P3",
+    "owner": "apm-emea",
+    "overrides": []
+  }
+}
