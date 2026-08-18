@@ -4,7 +4,6 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { runScenario } from "../src/pipeline.js";
 import { AuditLog } from "../src/audit/log.js";
-import { IncidentRegistry } from "../src/detect/dedup.js";
 import type { LlmClient } from "../src/llm/client.js";
 import type { OwnerTable, PricingTable, Thresholds } from "../src/config.js";
 import type { Scenario } from "../src/types.js";
@@ -93,7 +92,6 @@ function deps(llm: LlmClient, approval: "auto" | "none" = "none") {
     owners,
     pricing,
     audit: new AuditLog({ dir, runId: "run_test" }),
-    registry: new IncidentRegistry(),
     approval,
   };
 }
@@ -153,6 +151,37 @@ describe("runScenario", () => {
     expect(card.outcome).toBe("needs_review");
     expect(card.overrides).toContain("model_downgrade_rejected");
     expect(card.executed.some((a) => a.requires_approval)).toBe(false);
+  });
+
+  it("suppresses a repeat of the same key inside one scenario", async () => {
+    const llm = llmReturning(
+      { severity: "P1", confidence: 0.92, category: "provider_outage", supporting_evidence_ids: ["ev_01"], reasoning_brief: "status page" },
+      { headline: "PIX degraded", claims: [{ text: "cited", evidence_ids: ["ev_01"] }], suspected_cause: "provider", merchant_impact: "x", recommended_owner: "apm-latam", open_questions: [] },
+    );
+    const first = outage().metrics[0]!;
+    const sc = outage({
+      id: "dedup-repeat",
+      metrics: [
+        first,
+        { ...first, window_start: "2026-08-18T10:20:00Z", window_end: "2026-08-18T10:35:00Z" },
+      ],
+    });
+    const card = await runScenario(sc, deps(llm));
+    expect(card.outcome).toBe("P1");
+    expect(card.suppressed_repeats).toBe(1);
+  });
+
+  it("keeps scenarios independent: the same key twice does not self-suppress", async () => {
+    const llm = llmReturning(
+      { severity: "P1", confidence: 0.92, category: "provider_outage", supporting_evidence_ids: ["ev_01"], reasoning_brief: "status page" },
+      { headline: "PIX degraded", claims: [{ text: "cited", evidence_ids: ["ev_01"] }], suspected_cause: "provider", merchant_impact: "x", recommended_owner: "apm-latam", open_questions: [] },
+    );
+    const d = deps(llm);
+    const a = await runScenario(outage({ id: "a" }), d);
+    const b = await runScenario(outage({ id: "b" }), d);
+    expect(a.outcome).toBe("P1");
+    expect(b.outcome).toBe("P1");
+    expect(b.suppressed_repeats).toBe(0);
   });
 
   it("writes an audit record for every executed step", async () => {

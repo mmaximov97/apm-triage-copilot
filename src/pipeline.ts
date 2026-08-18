@@ -7,7 +7,7 @@ import { resolveOwner, type ResolvedOwner } from "./act/routing.js";
 import { costOf } from "./audit/cost.js";
 import type { AuditLog } from "./audit/log.js";
 import type { OwnerTable, PricingTable, Thresholds } from "./config.js";
-import type { IncidentRegistry } from "./detect/dedup.js";
+import { IncidentRegistry } from "./detect/dedup.js";
 import { detect } from "./detect/rules.js";
 import { digest } from "./llm/cassette.js";
 import type { LlmClient } from "./llm/client.js";
@@ -29,7 +29,6 @@ export type PipelineDeps = {
   owners: OwnerTable;
   pricing: PricingTable;
   audit: AuditLog;
-  registry: IncidentRegistry;
   approval: ApprovalMode;
 };
 
@@ -45,7 +44,7 @@ export type IncidentCard = {
   withheld: Action[];
   cost_usd: number;
   latency_ms: number;
-  suppressed: boolean;
+  suppressed_repeats: number;
 };
 
 export function loadScenarios(dir: string): Scenario[] {
@@ -71,11 +70,20 @@ export async function runScenario(
     withheld: [],
     cost_usd: 0,
     latency_ms: 0,
-    suppressed: false,
+    suppressed_repeats: 0,
   };
 
-  // Layer 1 — no model involved.
+  // A scenario is a self-contained situation, so it gets its own registry.
+  // Sharing one across scenarios would let an earlier scenario suppress a
+  // later one that happens to reuse the same method/country/psp key.
+  const registry = new IncidentRegistry();
+
+  // Layer 1 — no model involved. Every window is evaluated; the first
+  // un-suppressed signal becomes the incident, later repeats are recorded.
   let signal: Signal | null = null;
+  let incidentId = "";
+  let suppressedRepeats = 0;
+
   for (const window of sc.metrics) {
     const result = detect(window, deps.thresholds);
     deps.audit.append({
@@ -88,31 +96,34 @@ export async function runScenario(
         rejected_by: result.rejected_by,
       },
     });
-    if (result.signal !== null) {
+    if (result.signal === null) continue;
+
+    const dedup = registry.check(
+      result.signal.key,
+      window.window_end,
+      deps.thresholds.suppression_minutes,
+    );
+    deps.audit.append({
+      scenario_id: sc.id,
+      step: "detect",
+      rule_trace: [dedup.trace],
+      input_digest: digest({ key: result.signal.key, window_end: window.window_end }),
+      output: { suppressed: dedup.suppressed, attach_to: dedup.attach_to },
+    });
+    if (dedup.suppressed) {
+      suppressedRepeats += 1;
+      continue;
+    }
+
+    const id = `inc_${digest(result.signal.key + window.window_start).slice(0, 8)}`;
+    registry.register(result.signal.key, window.window_end, id);
+    if (signal === null) {
       signal = result.signal;
-      break;
+      incidentId = id;
     }
   }
-  if (signal === null) return empty;
 
-  const dedup = deps.registry.check(
-    signal.key,
-    signal.window.window_end,
-    deps.thresholds.suppression_minutes,
-  );
-  deps.audit.append({
-    scenario_id: sc.id,
-    step: "detect",
-    rule_trace: [dedup.trace],
-    input_digest: digest({ key: signal.key }),
-    output: { suppressed: dedup.suppressed, attach_to: dedup.attach_to },
-  });
-  if (dedup.suppressed) {
-    return { ...empty, key: signal.key, suppressed: true };
-  }
-
-  const incidentId = `inc_${digest(signal.key + signal.window.window_start).slice(0, 8)}`;
-  deps.registry.register(signal.key, signal.window.window_end, incidentId);
+  if (signal === null) return { ...empty, suppressed_repeats: suppressedRepeats };
 
   // Layer 2 — call A.
   let cost = 0;
@@ -216,6 +227,6 @@ export async function runScenario(
     withheld: approvals.withheld,
     cost_usd: cost,
     latency_ms: latency,
-    suppressed: false,
+    suppressed_repeats: suppressedRepeats,
   };
 }

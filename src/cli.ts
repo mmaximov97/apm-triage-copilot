@@ -9,7 +9,6 @@ import {
   loadThresholds,
   projectRoot,
 } from "./config.js";
-import { IncidentRegistry } from "./detect/dedup.js";
 import { LlmClient, type LlmMode } from "./llm/client.js";
 import { loadScenarios, runScenario, type IncidentCard } from "./pipeline.js";
 
@@ -36,7 +35,6 @@ const deps = {
   owners: loadOwners(),
   pricing: loadPricing(),
   audit,
-  registry: new IncidentRegistry(),
   approval,
 };
 
@@ -58,7 +56,7 @@ function render(card: IncidentCard): string {
   const bar = "─".repeat(Math.max(3, 58 - card.scenario_id.length));
   lines.push(`── ${card.scenario_id} ${bar}`);
   lines.push(
-    `outcome:   ${card.outcome}${card.suppressed ? " (suppressed by dedup)" : ""}`,
+    `outcome:   ${card.outcome}`,
   );
   if (card.key !== null) lines.push(`key:       ${card.key}`);
   if (card.owner !== null) {
@@ -75,6 +73,11 @@ function render(card: IncidentCard): string {
     for (const c of card.summary.claims) {
       lines.push(`  · ${c.text}  [${c.evidence_ids.join(", ")}]`);
     }
+  }
+  if (card.suppressed_repeats > 0) {
+    lines.push(
+      `dedup:     ${card.suppressed_repeats} repeat window(s) attached to the open incident instead of paging again`,
+    );
   }
   if (card.dropped_claims.length > 0) {
     lines.push(
