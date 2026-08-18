@@ -1,0 +1,11 @@
+# Layer 1 gates. Tuned for alternative payment methods, where a healthy
+# baseline ranges from ~0.55 (bank redirect flows) to ~0.98 (wallet flows).
+min_attempts: 50
+abs_drop: 0.15
+rel_drop: 0.25
+p_value: 0.01
+# Hard breach is not a severity. It is a fuse the model cannot clear.
+hard_breach_rate: 0.5
+hard_breach_attempts: 200
+suppression_minutes: 30
+confidence_floor: 0.6

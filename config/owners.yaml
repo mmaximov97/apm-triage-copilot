@@ -1,0 +1,30 @@
+default:
+  team: apm-techops
+  channel: "#apm-ops"
+  escalation: business_hours
+routes:
+  - method: pix
+    psp: psp_acme
+    team: apm-latam
+    channel: "#apm-latam"
+    escalation: follow_the_sun
+  - method: pix
+    psp: psp_beta
+    team: apm-latam
+    channel: "#apm-latam"
+    escalation: follow_the_sun
+  - method: upi
+    psp: psp_indus
+    team: apm-apac
+    channel: "#apm-apac"
+    escalation: follow_the_sun
+  - method: ideal
+    psp: psp_lowlands
+    team: apm-emea
+    channel: "#apm-emea"
+    escalation: business_hours
+  - method: boleto
+    psp: psp_acme
+    team: apm-latam
+    channel: "#apm-latam"
+    escalation: business_hours

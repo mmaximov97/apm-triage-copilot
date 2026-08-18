@@ -1,0 +1,11 @@
+# MODELLED, NOT MEASURED. These are estimates of manual effort per step,
+# used to project time saved. Every number that derives from this file is
+# labelled as a model in the eval report and in the submission document.
+manual_minutes:
+  check_dashboard: 4
+  validate_signal: 6
+  collect_evidence: 9
+  write_summary: 7
+  find_owner: 3
+automated_minutes:
+  human_review_of_draft: 2
