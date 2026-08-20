@@ -31,6 +31,6 @@
     "signal_created": true,
     "severity": "needs_review",
     "owner": "apm-apac",
-    "overrides": []
+    "overrides": ["injection_detected"]
   }
 }

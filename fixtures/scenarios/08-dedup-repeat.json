@@ -34,8 +34,8 @@
   ],
   "expected": {
     "signal_created": true,
-    "severity": "P1",
+    "severity": "needs_review",
     "owner": "apm-latam",
-    "overrides": []
+    "overrides": ["model_downgrade_rejected"]
   }
 }

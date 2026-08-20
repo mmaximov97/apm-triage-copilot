@@ -12,7 +12,7 @@ import { detect } from "./detect/rules.js";
 import { digest } from "./llm/cassette.js";
 import type { LlmClient } from "./llm/client.js";
 import { classify, CLASSIFY_MODEL } from "./reason/classify.js";
-import { decideOutcome } from "./reason/guardrails.js";
+import { decideOutcome, scanForInjectionAttempt } from "./reason/guardrails.js";
 import {
   CLASSIFY_PROMPT_VERSION,
   SUMMARIZE_PROMPT_VERSION,
@@ -137,21 +137,31 @@ export async function runScenario(
     signal,
     deps.thresholds.confidence_floor,
   );
+
+  let outcome = decision.outcome;
+  const overrides = [...decision.overrides];
+
+  // Deterministic, independent of what the model returned: a manipulation
+  // attempt found in evidence is itself worth a human's eyes, whether or not
+  // the model resisted it.
+  const injectionScan = scanForInjectionAttempt(sc.evidence);
+  if (injectionScan.detected) {
+    overrides.push("injection_detected");
+    outcome = "needs_review";
+  }
+
   deps.audit.append({
     scenario_id: sc.id,
     step: "classify",
     model: CLASSIFY_MODEL,
     prompt_version: CLASSIFY_PROMPT_VERSION,
     input_digest: digest({ signal, evidence: sc.evidence }),
-    output: { triage: classified.triage, outcome: decision.outcome },
-    overrides: decision.overrides,
+    output: { triage: classified.triage, outcome },
+    overrides,
     usage: classified.usage,
     latency_ms: classified.latency_ms,
     cost_usd: classifyCost,
   });
-
-  let outcome = decision.outcome;
-  const overrides = [...decision.overrides];
 
   // Layer 2 — call B, only where the expensive model earns its price.
   let summary: Summary | null = null;
