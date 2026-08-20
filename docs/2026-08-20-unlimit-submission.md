@@ -1,7 +1,7 @@
 # AI in APM Operations — Take-Home Submission
 
 **Mikhail Maximov — Technical Operations, Alternative Payment Methods**
-**Repository:** `apm-triage-copilot` (private, link below) — 74/74 tests, typecheck clean, 8/8 labelled scenarios pass in `npm run eval`.
+**Repository:** <https://github.com/mmaximov97/apm-triage-copilot> — 74/74 tests, typecheck clean, 8/8 labelled scenarios pass in `npm run eval`.
 
 ---
 
@@ -81,8 +81,7 @@ npm run eval        # 8/8 labelled scenarios match expectation, severity accurac
 
 Cost and latency in the eval report are real numbers replayed from actual Anthropic API calls, not estimates: **$0.042 total for the 8-scenario run, ≈$0.0085 per incident, 3.1s median end-to-end model latency.** The MTTR figures in the same report (27 min projected saving per incident) are explicitly labelled as modelled, not measured, because I don't have real handling-time data for this team — see Known limitations.
 
-Repository: `<link>`
-Loom walkthrough (optional, ≤5 min): `<link>`
+Repository: <https://github.com/mmaximov97/apm-triage-copilot>
 
 ---
 

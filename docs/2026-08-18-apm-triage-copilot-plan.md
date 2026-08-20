@@ -3677,7 +3677,7 @@ git commit -m "docs: readme and z-test correction in the design doc"
 
 ```bash
 rm -rf /tmp/fresh-clone-check
-git clone /home/cypher/Projects/apm-triage-copilot /tmp/fresh-clone-check
+git clone ~/Projects/apm-triage-copilot /tmp/fresh-clone-check
 cd /tmp/fresh-clone-check
 env -u ANTHROPIC_API_KEY npm ci
 env -u ANTHROPIC_API_KEY npm run demo
@@ -3692,7 +3692,7 @@ Expected: все четыре команды завершаются успешн
 - [ ] **Step 5: Прибрать за проверкой**
 
 ```bash
-cd /home/cypher/Projects/apm-triage-copilot
+cd ~/Projects/apm-triage-copilot
 rm -rf /tmp/fresh-clone-check
 ```
 
