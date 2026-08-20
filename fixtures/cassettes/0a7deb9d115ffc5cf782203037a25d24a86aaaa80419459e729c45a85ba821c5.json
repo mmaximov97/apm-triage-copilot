@@ -1,0 +1,24 @@
+{
+  "key": "0a7deb9d115ffc5cf782203037a25d24a86aaaa80419459e729c45a85ba821c5",
+  "model": "claude-haiku-4-5",
+  "prompt_version": "classify-v1",
+  "parsed": {
+    "severity": "P1",
+    "confidence": 0.92,
+    "category": "provider_outage",
+    "supporting_evidence_ids": [
+      "ev_01",
+      "ev_02",
+      "ev_03"
+    ],
+    "reasoning_brief": "PSP Acme's status page explicitly reports degraded PIX settlement performance with elevated timeouts since 09:58 UTC, overlapping the metric window. Multiple merchants (LojaVerde and two others) report PIX-specific failures while card payments work normally. No internal deploys correlate. Success rate dropped from 94% to 30% across 1840 attempts—broad customer impact, no workaround."
+  },
+  "usage": {
+    "input_tokens": 1235,
+    "output_tokens": 139,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  },
+  "latency_ms": 6570,
+  "stop_reason": "end_turn"
+}

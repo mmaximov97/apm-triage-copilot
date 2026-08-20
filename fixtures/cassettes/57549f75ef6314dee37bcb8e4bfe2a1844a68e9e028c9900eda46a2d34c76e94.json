@@ -1,0 +1,46 @@
+{
+  "key": "57549f75ef6314dee37bcb8e4bfe2a1844a68e9e028c9900eda46a2d34c76e94",
+  "model": "claude-opus-5",
+  "prompt_version": "summarize-v1",
+  "parsed": {
+    "headline": "P1 (confidence 0.7): PIX/BR success rate collapses to 25% on psp_acme while provider status page reports degraded PIX settlement",
+    "claims": [
+      {
+        "text": "PSP Acme's own status page, observed at 20:05Z inside the 20:00–20:15Z metric window, reports PIX settlement as still degraded with mitigation in progress and the next update due in 30 minutes.",
+        "evidence_ids": [
+          "ev_01"
+        ]
+      },
+      {
+        "text": "The provider describes the degradation as ongoing ('still degraded'), implying it began before the observed metric window and had not been resolved at the time of observation.",
+        "evidence_ids": [
+          "ev_01"
+        ]
+      },
+      {
+        "text": "The provider-reported degradation is on the PIX rails themselves rather than a merchant-specific integration, so the failure is expected to affect all PIX traffic routed through psp_acme.",
+        "evidence_ids": [
+          "ev_01"
+        ]
+      }
+    ],
+    "suspected_cause": "provider_outage — the psp_acme status page independently confirms degraded PIX settlement overlapping the anomalous window, which aligns the metric drop (0.25 vs 0.94 baseline) with a provider-side failure rather than an internal change or a single merchant's configuration. No maintenance announcement is present in the evidence, so this reads as unplanned degradation. Confidence 0.7: the status page is a direct and timely corroboration, but the bundle contains only one item, with no per-merchant breakdown or internal change log to rule out a contributing internal factor.",
+    "merchant_impact": "Scope cannot be attributed to any single merchant from the evidence supplied; the status page describes rail-level PIX settlement degradation on psp_acme, which points to all BR PIX volume on that PSP being affected for the duration of the window. No workaround is named in the evidence, so failing attempts are likely customer-visible at checkout.",
+    "recommended_owner": "APM provider-relations / PSP liaison on-call, to track psp_acme's promised 30-minute update and drive any failover of BR PIX volume to an alternate PSP.",
+    "open_questions": [
+      "Is the failure spread across multiple merchants on psp_acme, or concentrated in one? No per-merchant breakdown was supplied.",
+      "Did psp_acme announce a maintenance window covering 20:00–20:15Z? Nothing in the bundle indicates the degradation was planned.",
+      "When did the degradation start and has the promised 30-minute follow-up update been published?",
+      "Is an alternate PSP available for BR PIX, and what is the cost/latency of failing over?",
+      "Are there any internal deploys, certificate rotations, or routing changes in this window that could be compounding the provider-side issue? No internal tickets or Slack evidence was provided."
+    ]
+  },
+  "usage": {
+    "input_tokens": 226,
+    "output_tokens": 1087,
+    "cache_read_input_tokens": 1475,
+    "cache_creation_input_tokens": 0
+  },
+  "latency_ms": 15658,
+  "stop_reason": "end_turn"
+}

@@ -1,0 +1,22 @@
+{
+  "key": "b18b369a04e48d27f41f2b998f37f6664d10d8b938c73048376f67f963e27bf6",
+  "model": "claude-haiku-4-5",
+  "prompt_version": "classify-v1",
+  "parsed": {
+    "severity": "P1",
+    "confidence": 0.92,
+    "category": "provider_outage",
+    "supporting_evidence_ids": [
+      "ev_02"
+    ],
+    "reasoning_brief": "Success rate collapsed from 91% baseline to 20% on UPI with psp_indus over 15 minutes (2400 attempts, 1920 failures). Merchant reports widespread timeouts with no integration changes, indicating failure at PSP/payment method rails rather than merchant config or internal error. Affects broad customer base."
+  },
+  "usage": {
+    "input_tokens": 1159,
+    "output_tokens": 118,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  },
+  "latency_ms": 2025,
+  "stop_reason": "end_turn"
+}

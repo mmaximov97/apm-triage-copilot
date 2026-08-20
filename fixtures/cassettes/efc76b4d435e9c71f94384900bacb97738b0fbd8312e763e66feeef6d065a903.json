@@ -1,0 +1,23 @@
+{
+  "key": "efc76b4d435e9c71f94384900bacb97738b0fbd8312e763e66feeef6d065a903",
+  "model": "claude-haiku-4-5",
+  "prompt_version": "classify-v1",
+  "parsed": {
+    "severity": "P3",
+    "confidence": 0.95,
+    "category": "planned_maintenance",
+    "supporting_evidence_ids": [
+      "ev_01",
+      "ev_02"
+    ],
+    "reasoning_brief": "The anomalous 42% success rate (vs 96% baseline) during the metric window exactly overlaps a scheduled maintenance window announced on 4 August. PSP Lowlands iDEAL routing migration was publicly communicated as occurring 12:00-13:00 UTC on 18 August, with elevated failures expected. Internal team was notified to expect this degradation. This is expected operational activity, not an incident."
+  },
+  "usage": {
+    "input_tokens": 1185,
+    "output_tokens": 144,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  },
+  "latency_ms": 3091,
+  "stop_reason": "end_turn"
+}

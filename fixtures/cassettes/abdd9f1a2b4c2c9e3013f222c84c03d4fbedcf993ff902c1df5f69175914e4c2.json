@@ -1,0 +1,20 @@
+{
+  "key": "abdd9f1a2b4c2c9e3013f222c84c03d4fbedcf993ff902c1df5f69175914e4c2",
+  "model": "claude-haiku-4-5",
+  "prompt_version": "classify-v1",
+  "parsed": {
+    "severity": "P1",
+    "confidence": 0.35,
+    "category": "unknown",
+    "supporting_evidence_ids": [],
+    "reasoning_brief": "Signal shows PSP Acme PIX (Brazil) dropped from 94% to 25% success rate in 15min window (1200 attempts, 300 successes). This is a hard breach affecting 900 failed transactions. Without evidence—no provider status reports, internal tickets, or merchant reports—root cause is unclear. Could be provider outage, internal routing error, or credential/config issue. Escalation to human review required."
+  },
+  "usage": {
+    "input_tokens": 1010,
+    "output_tokens": 128,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  },
+  "latency_ms": 3290,
+  "stop_reason": "end_turn"
+}

@@ -1,0 +1,22 @@
+{
+  "key": "ea8b15d2a011ffad953bef6504590fe32c66da6552ce998410f0c20daf4de3cc",
+  "model": "claude-haiku-4-5",
+  "prompt_version": "classify-v1",
+  "parsed": {
+    "severity": "P2",
+    "confidence": 0.85,
+    "category": "provider_outage",
+    "supporting_evidence_ids": [
+      "ev_01"
+    ],
+    "reasoning_brief": "PIX processing success rate collapsed from 94% baseline to 25% over 15 minutes on psp_acme. PSP status page confirms PIX settlement degradation with mitigation underway. This is a partial provider outage affecting the payment method's rails, impacting potentially multiple merchants on that PSP but bounded by the provider's ongoing recovery efforts."
+  },
+  "usage": {
+    "input_tokens": 1077,
+    "output_tokens": 115,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 0
+  },
+  "latency_ms": 1954,
+  "stop_reason": "end_turn"
+}

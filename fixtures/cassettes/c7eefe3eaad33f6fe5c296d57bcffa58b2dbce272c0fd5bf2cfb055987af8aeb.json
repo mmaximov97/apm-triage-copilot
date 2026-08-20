@@ -1,0 +1,59 @@
+{
+  "key": "c7eefe3eaad33f6fe5c296d57bcffa58b2dbce272c0fd5bf2cfb055987af8aeb",
+  "model": "claude-opus-5",
+  "prompt_version": "summarize-v1",
+  "parsed": {
+    "headline": "PIX success rate collapses to 30% on PSP Acme in BR — provider reports degraded PIX settlement",
+    "claims": [
+      {
+        "text": "PSP Acme's status page reports DEGRADED PERFORMANCE on PIX settlement since 09:58 UTC due to elevated timeouts at the clearing layer, with no ETA — this starts just before the 10:00–10:15 UTC anomaly window.",
+        "evidence_ids": [
+          "ev_01"
+        ]
+      },
+      {
+        "text": "At least three separate merchants reported PIX problems within ten minutes, indicating the failure is not bounded to one merchant.",
+        "evidence_ids": [
+          "ev_03"
+        ]
+      },
+      {
+        "text": "Merchant LojaVerde reports customers seeing 'payment failed' on PIX checkout from about 10:00 UTC, while card payments on the same checkout are unaffected — the failure is method-specific to PIX.",
+        "evidence_ids": [
+          "ev_02"
+        ]
+      },
+      {
+        "text": "No internal change is implicated: nothing shipped today and the last deploy was Friday, which argues against an internal_error cause.",
+        "evidence_ids": [
+          "ev_03"
+        ]
+      },
+      {
+        "text": "Classification: provider_outage, severity P1, confidence 0.88 — a provider-side degradation on the same PSP confirmed by the provider itself and corroborated by multiple merchants, with no known workaround for PIX.",
+        "evidence_ids": [
+          "ev_01",
+          "ev_02",
+          "ev_03"
+        ]
+      }
+    ],
+    "suspected_cause": "provider_outage — PSP Acme's PIX clearing/settlement layer is timing out, per its own status page, corroborated by multi-merchant reports and the absence of any internal change.",
+    "merchant_impact": "Broad: roughly 70% of PIX attempts failing in the window (552 successes of 1840 attempts vs a 0.94 baseline), affecting at least three merchants including LojaVerde. Card payments on the same checkouts continue to work, so merchants with card fallback have partial mitigation; PIX-only flows have none.",
+    "recommended_owner": "APM operations on-call — PSP Acme provider liaison (escalate to PSP Acme support and consider routing PIX volume away from psp_acme if an alternate route exists)",
+    "open_questions": [
+      "Does an alternate PSP route exist for PIX in BR, and can traffic be shifted while Acme is degraded?",
+      "How many merchants and what total PIX volume are exposed to psp_acme beyond the three that reported?",
+      "Are failed attempts safely non-captured, or is there settlement ambiguity/double-charge risk from clearing-layer timeouts?",
+      "Has PSP Acme provided an ETA or incident ID since the 10:04 UTC status update?"
+    ]
+  },
+  "usage": {
+    "input_tokens": 455,
+    "output_tokens": 884,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1475
+  },
+  "latency_ms": 17113,
+  "stop_reason": "end_turn"
+}
