@@ -7,8 +7,6 @@
 
 ## 1. Problem framing
 
-> **[ВАШ ГОЛОС — проверьте и при желании перепишите этот раздел; особенно абзац про FinOps.]**
-
 Today the APM team's incident handling is a manual pipeline: watch dashboards, notice a drop, open provider status pages and tickets, decide whether the signal is real, collect corroborating evidence from several systems, write up impact, find the right owner, escalate, follow through to resolution. Every step after "notice a drop" is slow mostly because it's serial and manual, not because it's hard.
 
 Splitting the pipeline by what actually needs a model:
@@ -24,8 +22,6 @@ One pattern I already run in production, at smaller scale: an agent on one of my
 ---
 
 ## 2. Three AI use cases
-
-> **[ВАШ ГОЛОС — это кандидаты, не финал. №1 уже реализован и проверен в этом репозитории; №2 и №3 — правдоподобные, но придуманные мной сценарии. Если у вас есть более сильный реальный пример из практики — он побьёт любой из придуманных. Замените смело.]**
 
 | # | Use case | Input | AI action | Output | User | Operational value |
 |---|---|---|---|---|---|---|
